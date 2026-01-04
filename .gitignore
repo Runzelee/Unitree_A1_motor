@@ -1,0 +1,96 @@
+########################################
+# VSCode Configuration
+########################################
+.vscode/
+.idea/
+
+########################################
+# Keil User/IDE State Files
+########################################
+*.opt
+*.uvopt
+*.uvoptx
+*.uvgui
+*.uvgui.*
+*.uvguix.*
+
+########################################
+# Keil Build Output
+########################################
+*.axf
+*.elf
+*.hex
+*.bin
+*.out
+
+# Objects & temp
+*.o
+*.obj
+*.d
+*.crf
+*.dep
+*.lnp
+*.lst
+*.map
+*.cod
+*.m51
+*.m66
+*.i
+*.h86
+*.lib
+*.sbr
+
+########################################
+# Keil Build Directories
+########################################
+# MDK-ARM
+MDK-ARM/DebugConfig/
+MDK-ARM/RTE/
+MDK-ARM/*/Objects/
+MDK-ARM/*/Listings/
+MDK-ARM/*/Debug/
+MDK-ARM/*/*.buildlog.htm
+MDK-ARM/6020.3/*
+
+########################################
+# STM32CubeMX
+########################################
+*.ioc-backup
+
+########################################
+# Misc Intermediate Files
+########################################
+*.ic
+*.lin
+*.orc
+*.sct
+*.sfd
+*.sfr
+*.plg
+*.pdsc
+*.pack
+*.ini
+*.log
+*.tmp
+*.scr
+*.bak
+*.htm
+
+########################################
+# OS / Editor Trash
+########################################
+Thumbs.db
+.DS_Store
+RM_Chassis_2025_SupNew_ordinary_7.28/
+cmake/
+.cache/
+.cmsis/
+.eide/
+.clang-format
+.clangd
+*.code-workspace
+build/
+References/
+data_format.md
+
+
