@@ -32,8 +32,7 @@ message("Build type: " ${CMAKE_BUILD_TYPE})
 enable_language(C ASM)
 
 # Create an executable object type
-add_executable(${CMAKE_PROJECT_NAME}
-        User/Src/unitree_motor.c)
+add_executable(${CMAKE_PROJECT_NAME})
 
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)
@@ -43,7 +42,7 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined library search paths
 )
 
-file(GLOB_RECURSE USER_SOURCES "User/Src/*.c")
+file(GLOB_RECURSE USER_SOURCES CONFIGURE_DEPENDS "User/*.c")
 
 # Add sources to executable
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
@@ -54,7 +53,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
 # Add include paths
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined include paths
-    User/Inc/
+    User/
 )
 
 # Add project symbols (macros)

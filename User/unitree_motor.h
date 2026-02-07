@@ -2,7 +2,7 @@
 #define __UNITREE_MOTOR_H
 
 #include <stdint.h>
-#include "usart.h" // 引用HAL库和UART定义
+#include "stm32f4xx_hal.h" 
 
 // 模拟 SDK 的枚举定义
 typedef enum {
@@ -14,7 +14,7 @@ typedef enum {
 typedef enum {
     MotorMode_BRAKE = 0,
     MotorMode_FOC = 10,
-    MotorMode_CALIBRATE = 11 // 注意 SDK 中可能是其他值，但这里参考 data_format.md: 10: 闭环伺服
+    MotorMode_SLOW = 5 
 } MotorMode;
 
 // 模拟 SDK 的各类参数结构体
@@ -79,11 +79,77 @@ typedef struct {
     COMData32 CRCdata;    // CRC32
 } MasterComdDataV3;
 
+// 接收数据主体 (Motor -> Master)
+typedef struct {
+    uint8_t mode;         // 当前运行模式
+    uint8_t Temp;         // 电机温度
+    uint8_t MError;       // 错误标识
+    uint8_t Read[5];      // 内部参数
+    
+    int16_t T;            // 当前输出力矩 (T * 256)
+    int16_t W;            // 当前转速 (W * 128)
+    int32_t LW;           // 滤波转速
+    
+    int16_t W2;           // 预留
+    int32_t LW2;          // 预留
+    
+    int16_t Acc;          // 当前输出加速度
+    int16_t OutAcc;       // 预留
+    
+    int32_t Pos;          // 当前输出位置 (Pos / (16384/2Pi))
+    int32_t Pos2;         // 预留
+    
+    int16_t gyro[3];      // IMU 角速度
+    int16_t acc[3];       // IMU 线加速度
+    
+    int16_t Fgyro[3];     // 预留
+    int16_t Facc[3];      // 预留
+    int16_t Fmag[3];      // 预留
+    
+    uint8_t Ftemp;        // 足端温度
+    uint16_t Force16;     // 足端力
+    uint8_t Force8;       // 足端力
+    uint8_t FError;       // 足端错误
+    
+    uint8_t Res;          // 预留
+    
+} MasterRecvDataV3;
+
+// 完整的接收包
+typedef struct {
+    COMHead head;
+    MasterRecvDataV3 Mdata;
+    COMData32 CRCdata;    // CRC32
+} MasterRecvDataPacketV3;
+
+// 用户友好的状态结构体 (解码后)
+typedef struct {
+    uint8_t  id;
+    uint8_t  mode;
+    float    T;        // 力矩 (Nm)
+    float    W;        // 速度 (rad/s)
+    float    Pos;      // 位置 (rad)
+    int8_t   Temp;     // 温度 (C)
+    uint8_t  MError;   // 错误码
+    int16_t  footForce; // 足端压力
+    
+    // IMU Data
+    float    gyro[3];
+    float    acc[3];
+    
+    uint32_t invalid_cnt; // CRC 错误计数
+    uint8_t  valid;       // 数据有效标志
+} UnitreeMotorState;
+
 #pragma pack()
+
+extern UnitreeMotorState g_unitree_motor_state;
 
 // 对外接口函数
 void Unitree_Init(UART_HandleTypeDef *huart);
 void Unitree_SendCmd(MotorCmd *cmd);
+void Unitree_Poll(void); // 周期性轮询
+
 float queryGearRatio(MotorType type);
 uint8_t queryMotorMode(MotorType type, MotorMode mode);
 

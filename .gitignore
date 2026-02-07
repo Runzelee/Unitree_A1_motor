@@ -92,5 +92,5 @@ cmake/
 build/
 References/
 data_format.md
-
+compile_commands.json
 
