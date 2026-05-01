@@ -82,7 +82,6 @@ MDK-ARM/6020.3/*
 Thumbs.db
 .DS_Store
 RM_Chassis_2025_SupNew_ordinary_7.28/
-cmake/
 .cache/
 .cmsis/
 .eide/
